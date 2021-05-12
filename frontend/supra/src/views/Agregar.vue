@@ -7,6 +7,7 @@
         <div class="mb-3">
           <label class="form-label color">Name</label>
           <input
+            v-model="integrantes.nombres"
             type="text"
             id="nombre"
             class="form-control"
@@ -15,17 +16,17 @@
         </div>
         <div class="mb-3">
           <label class="form-label color">Last Name</label>
-          <input id="apellido" type="text" class="form-control" />
+          <input v-model="integrantes.apellidos" id="apellido" type="text" class="form-control" />
         </div>
 
         <div>
           <label class="form-label color">Area</label>
           <select
+            v-model="integrantes.areas"
             class="form-select form-select-sm select"
             aria-label="Default select example"
           >
-            <option selected>Choose a option</option>
-            <option id="area" v-for="lista in todasAreas" :key="lista.id">
+            <option id="area" v-for="lista in todasAreas" :key="lista.id" :value="lista.id">
               {{ lista.nombre }}
             </option>
           </select>
@@ -35,11 +36,11 @@
         <div>
           <label class="form-label color">Sub Area</label>
           <select
+            v-model="integrantes.subareas"
             class="form-select form-select-sm select"
             aria-label="Default select example"
           >
-            <option selected>Choose a option</option>
-            <option id="subarea" v-for="lista in todasSubAreas" :key="lista.id">
+            <option id="subarea" v-for="lista in todasSubAreas" :key="lista.id" :value="lista.id">
               {{ lista.nombre }}
             </option>
           </select>
@@ -49,22 +50,21 @@
         <div>
           <label class="form-label color">Document Type</label>
           <select
+            v-model="integrantes.documentos"
             class="form-select form-select-sm select"
             aria-label="Default select example"
           >
-            <option selected>Choose a option</option>
-            <option id="documento" v-for="lista in todosDocumentos" :key="lista.id">
+            <option id="documento" v-for="lista in todosDocumentos" :key="lista.id" :value="lista.id">
               {{ lista.nombre }}
             </option>
           </select>
         </div>
         
-        <br />
-        <div class="mb-3">
+        <br />  <div class="mb-3">
           <label class="form-label color">Document Number</label>
-          <input id="numerodocumento" type="text" class="form-control" />
+          <input v-model="integrantes.numeroDocumentos" id="numerodocumento" type="text" class="form-control" />
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button @click.prevent="guardarIntegrantes()" type="submit" class="btn btn-primary">Submit</button>
         <a href="/integrantes" class="btn btn-primary">Cancel</a>
       </form>
     </div>
@@ -86,6 +86,7 @@ export default {
       todasAreas: null,
       todasSubAreas: null,
       todosDocumentos: null,
+      integrantes: {id:null, nombres:'', apellidos:'', numeroDocumentos:'', subareas:null, documentos:null, areas:null}
     };
   },
   mounted() {
@@ -105,7 +106,7 @@ export default {
     },
     getTodasSubAreas() {
       axios
-        .get("http://localhost:8000/api/Sub_Areas/")
+        .get("http://localhost:8000/api/Sub_areas/")
         .then((response) => {
           this.todasSubAreas = response.data;
         })
@@ -119,6 +120,23 @@ export default {
         })
         .catch((e) => console.log(e));
     },
+    guardarIntegrantes(){
+      var datos = {
+        nombre: this.integrantes.nombres,
+        apellido: this.integrantes.apellidos,
+        numeroDocumento: this.integrantes.numeroDocumentos,
+        subarea: this.integrantes.subareas,
+        documento: this.integrantes.documentos,
+        area: this.integrantes.areas
+      }
+
+      console.log(datos)
+      axios.post("http://localhost:8000/api/Empleados/", datos)
+      .then((respuesta) => {
+        console.log(respuesta.data)
+      })
+
+    }
   },
 };
 </script>

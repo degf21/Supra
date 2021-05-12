@@ -34,7 +34,7 @@ class Integrantes(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=300)
     apellido = models.CharField(max_length=300)
-    numeroDocumento = models.BigIntegerField()
+    numeroDocumento = models.CharField(max_length=50)
     subarea = models.ForeignKey(Sub_Areas, null=True, blank=True, on_delete=models.CASCADE)
     documento = models.ForeignKey(Documento, null=True, blank=True, on_delete=models.CASCADE)
     area = models.ForeignKey(Areas, null=True, blank=True, on_delete=models.CASCADE)
